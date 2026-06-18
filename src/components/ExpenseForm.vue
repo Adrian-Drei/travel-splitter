@@ -8,6 +8,7 @@ const description = ref("");
 const amount = ref("");
 const contributors = ref([]);
 const selectedParticipants = ref([]);
+const showForm = ref(false);
 
 watch(
   () => store.participants,
@@ -69,11 +70,34 @@ function addExpense() {
     participantId: person.id,
     amount: 0,
   }));
+
+  showForm.value = false;
+}
+
+function cancelExpense() {
+  showForm.value = false;
+
+  description.value = "";
+  amount.value = "";
+  selectedParticipants.value = [];
+
+  contributors.value = store.participants.map((person) => ({
+    participantId: person.id,
+    amount: 0,
+  }));
 }
 </script>
 
 <template>
-  <div class="space-y-6">
+  <div v-if="!showForm">
+    <button
+      @click="showForm = true"
+      class="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700"
+    >
+      + Add Expense
+    </button>
+  </div>
+  <div v-else class="space-y-6">
     <h2 class="text-2xl font-bold text-gray-800">Add Expense</h2>
 
     <!-- Description -->
@@ -155,11 +179,20 @@ function addExpense() {
 
     <!-- Button -->
 
-    <button
-      @click="addExpense"
-      class="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700 transition"
-    >
-      Add Expense
-    </button>
+    <div class="flex gap-3">
+      <button
+        @click="addExpense"
+        class="flex-1 rounded-lg bg-blue-600 py-3 font-semibold text-white"
+      >
+        Save Expense
+      </button>
+
+      <button
+        @click="cancelExpense"
+        class="flex-1 rounded-lg bg-gray-200 py-3 font-semibold text-gray-700"
+      >
+        Cancel
+      </button>
+    </div>
   </div>
 </template>

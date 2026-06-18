@@ -42,11 +42,20 @@ function getParticipants(expense) {
           {{ expense.description }}
         </h3>
 
-        <span
-          class="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700"
-        >
-          ₱{{ expense.amount }}
-        </span>
+        <div class="flex items-center gap-3">
+          <span
+            class="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700"
+          >
+            ₱{{ expense.amount }}
+          </span>
+
+          <button
+            @click="store.removeExpense(expense.id)"
+            class="rounded-lg bg-red-100 px-3 py-1 text-sm font-semibold text-red-600 hover:bg-red-200"
+          >
+            Delete
+          </button>
+        </div>
       </div>
 
       <div class="text-gray-600">

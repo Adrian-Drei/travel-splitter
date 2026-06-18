@@ -51,5 +51,11 @@ export const useTripStore = defineStore("trip", {
 
       this.save();
     },
+
+    removeExpense(id) {
+      this.expenses = this.expenses.filter((expense) => expense.id !== id);
+
+      this.save();
+    },
   },
 });
