@@ -16,23 +16,31 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1>Travel Expense Splitter</h1>
+  <div class="min-h-screen bg-gray-100 py-10">
+    <div class="max-w-3xl mx-auto px-4">
+      <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">
+        Travel Expense Splitter
+      </h1>
 
-  <ParticipantForm />
+      <div class="bg-white rounded-xl shadow p-6 space-y-8">
+        <ParticipantForm />
 
-  <hr />
+        <div class="border-t"></div>
 
-  <ExpenseForm />
+        <ExpenseForm />
 
-  <hr />
+        <div class="border-t"></div>
 
-  <ExpenseList />
+        <ExpenseList />
 
-  <hr />
+        <div class="border-t"></div>
 
-  <SettlementView />
-  
-  <hr />
+        <SettlementView />
 
-  <SettlementList />
+        <div class="border-t"></div>
+
+        <SettlementList />
+      </div>
+    </div>
+  </div>
 </template>

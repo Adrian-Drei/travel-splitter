@@ -17,7 +17,7 @@ watch(
       amount: 0,
     }));
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 const allSelected = computed({
@@ -42,7 +42,7 @@ function addExpense() {
 
   const totalContributed = contributors.value.reduce(
     (sum, contributor) => sum + Number(contributor.amount || 0),
-    0
+    0,
   );
 
   if (totalContributed !== Number(amount.value)) {
@@ -55,7 +55,7 @@ function addExpense() {
     amount: Number(amount.value),
 
     contributors: contributors.value.filter(
-      (contributor) => contributor.amount > 0
+      (contributor) => contributor.amount > 0,
     ),
 
     participants: [...selectedParticipants.value],
@@ -73,47 +73,75 @@ function addExpense() {
 </script>
 
 <template>
-  <div>
-    <h2>Add Expense</h2>
+  <div class="space-y-6">
+    <h2 class="text-2xl font-bold text-gray-800">Add Expense</h2>
 
-    <div>
-      <label>Description</label>
+    <!-- Description -->
+    <div class="space-y-2">
+      <label class="block font-medium text-gray-700">Description</label>
 
-      <input v-model="description" placeholder="Hotel" />
+      <input
+        v-model="description"
+        placeholder="Hotel"
+        class="w-full rounded-lg border border-gray-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+      />
     </div>
 
-    <div>
-      <label>Amount</label>
+    <!-- Amount -->
+    <div class="space-y-2">
+      <label class="block font-medium text-gray-700">Amount</label>
 
-      <input v-model.number="amount" type="number" min="0" />
+      <input
+        v-model.number="amount"
+        type="number"
+        min="0"
+        class="w-full rounded-lg border border-gray-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+      />
     </div>
 
-    <div>
-      <h3>Who Paid?</h3>
+    <!-- Contributors -->
 
-      <div v-for="contributor in contributors" :key="contributor.participantId">
-        <label>
+    <div class="space-y-3">
+      <h3 class="text-lg font-semibold text-gray-800">Who Paid?</h3>
+
+      <div
+        v-for="contributor in contributors"
+        :key="contributor.participantId"
+        class="flex items-center justify-between gap-4 rounded-lg bg-gray-50 p-3"
+      >
+        <span class="font-medium">
           {{
             store.participants.find((p) => p.id === contributor.participantId)
               ?.name
           }}
-        </label>
+        </span>
 
-        <input type="number" min="0" v-model.number="contributor.amount" />
+        <input
+          type="number"
+          min="0"
+          v-model.number="contributor.amount"
+          class="w-32 rounded-lg border border-gray-300 px-3 py-1.5 text-right"
+        />
       </div>
     </div>
 
-    <div>
-      <h3>Shared By</h3>
+    <!-- Shared By -->
 
-      <label>
-        <input type="checkbox" v-model="allSelected" />
+    <div class="space-y-3">
+      <h3 class="text-lg font-semibold text-gray-800">Shared By</h3>
+
+      <label class="flex items-center gap-2 cursor-pointer font-medium">
+        <input type="checkbox" v-model="allSelected" class="h-4 w-4" />
 
         Select All
       </label>
 
-      <div v-for="person in store.participants" :key="person.id">
-        <label>
+      <div class="grid grid-cols-2 gap-2">
+        <label
+          v-for="person in store.participants"
+          :key="person.id"
+          class="flex items-center gap-2 rounded-lg bg-gray-50 p-3 cursor-pointer hover:bg-gray-100"
+        >
           <input
             type="checkbox"
             :value="person.id"
@@ -125,6 +153,13 @@ function addExpense() {
       </div>
     </div>
 
-    <button @click="addExpense">Add Expense</button>
+    <!-- Button -->
+
+    <button
+      @click="addExpense"
+      class="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700 transition"
+    >
+      Add Expense
+    </button>
   </div>
 </template>

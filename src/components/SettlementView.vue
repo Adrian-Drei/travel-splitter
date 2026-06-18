@@ -36,15 +36,31 @@ function getName(id) {
 </script>
 
 <template>
-  <div>
-    <h2>Balances</h2>
+  <div class="space-y-6">
+    <h2 class="text-2xl font-bold text-gray-800">Balances</h2>
 
-    <div v-for="person in store.participants" :key="person.id">
-      {{ getName(person.id) }}
+    <div class="space-y-3">
+      <div
+        v-for="person in store.participants"
+        :key="person.id"
+        class="flex items-center justify-between rounded-xl border border-gray-200 bg-white p-4 shadow-sm"
+      >
+        <span class="font-semibold text-gray-800">
+          {{ getName(person.id) }}
+        </span>
 
-      :
-
-      <strong>₱{{ balances[person.id].toFixed(2) }}</strong>
+        <span
+          class="rounded-full px-4 py-1 font-bold"
+          :class="
+            balances[person.id] >= 0
+              ? 'bg-green-100 text-green-700'
+              : 'bg-red-100 text-red-700'
+          "
+        >
+          {{ balances[person.id] >= 0 ? "+" : "" }}
+          ₱{{ balances[person.id].toFixed(2) }}
+        </span>
+      </div>
     </div>
   </div>
 </template>

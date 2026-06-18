@@ -86,23 +86,38 @@ const settlements = computed(() => {
 </script>
 
 <template>
-  <div>
-    <h2>Settlement</h2>
+  <div class="space-y-6">
+    <h2 class="text-2xl font-bold text-gray-800">Settlement</h2>
 
-    <div v-if="!settlements.length">No payments needed</div>
+    <div
+      v-if="!settlements.length"
+      class="rounded-xl bg-green-50 p-5 text-center font-medium text-green-700"
+    >
+      🎉 No payments needed
+    </div>
 
-    <div v-for="item in settlements" :key="item.from + '-' + item.to">
-      <strong>
-        {{ getName(item.from) }}
-      </strong>
+    <div
+      v-for="item in settlements"
+      :key="item.from + '-' + item.to"
+      class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
+    >
+      <div class="flex items-center justify-between gap-3">
+        <div class="text-gray-700">
+          <span class="font-bold text-gray-900">
+            {{ getName(item.from) }}
+          </span>
 
-      pays
+          <span class="mx-2">pays</span>
 
-      <strong>
-        {{ getName(item.to) }}
-      </strong>
+          <span class="font-bold text-gray-900">
+            {{ getName(item.to) }}
+          </span>
+        </div>
 
-      ₱{{ item.amount.toFixed(2) }}
+        <span class="rounded-full bg-red-100 px-4 py-1 font-bold text-red-700">
+          ₱{{ item.amount.toFixed(2) }}
+        </span>
+      </div>
     </div>
   </div>
 </template>

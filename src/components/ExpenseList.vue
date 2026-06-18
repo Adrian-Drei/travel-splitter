@@ -22,30 +22,46 @@ function getParticipants(expense) {
 </script>
 
 <template>
-  <div>
-    <h2>Expenses</h2>
+  <div class="space-y-6">
+    <h2 class="text-2xl font-bold text-gray-800">Expenses</h2>
+
+    <div
+      v-if="!store.expenses.length"
+      class="rounded-lg bg-gray-50 p-6 text-center text-gray-500"
+    >
+      No expenses added yet.
+    </div>
 
     <div
       v-for="expense in store.expenses"
       :key="expense.id"
-      style="border: 1px solid #ddd; padding: 12px; margin-bottom: 12px"
+      class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-3"
     >
-      <h3>{{ expense.description }}</h3>
+      <div class="flex justify-between items-center">
+        <h3 class="text-xl font-semibold text-gray-800">
+          {{ expense.description }}
+        </h3>
 
-      <p>
-        <strong>Amount:</strong>
-        ₱{{ expense.amount }}
-      </p>
+        <span
+          class="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-700"
+        >
+          ₱{{ expense.amount }}
+        </span>
+      </div>
 
-      <p>
-        <strong>Paid By:</strong>
-        {{ getContributors(expense) }}
-      </p>
+      <div class="text-gray-600">
+        <p>
+          <span class="font-semibold">Paid By:</span>
 
-      <p>
-        <strong>Shared By:</strong>
-        {{ getParticipants(expense) }}
-      </p>
+          {{ getContributors(expense) }}
+        </p>
+
+        <p>
+          <span class="font-semibold">Shared By:</span>
+
+          {{ getParticipants(expense) }}
+        </p>
+      </div>
     </div>
   </div>
 </template>
