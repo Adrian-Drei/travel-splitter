@@ -18,7 +18,7 @@ watch(
       amount: 0,
     }));
   },
-  { immediate: true },
+  { immediate: true, deep: true },
 );
 
 const allSelected = computed({
