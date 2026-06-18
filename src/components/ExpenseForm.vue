@@ -89,110 +89,115 @@ function cancelExpense() {
 </script>
 
 <template>
-  <div v-if="!showForm">
-    <button
-      @click="showForm = true"
-      class="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700"
-    >
-      + Add Expense
-    </button>
-  </div>
-  <div v-else class="space-y-6">
-    <h2 class="text-2xl font-bold text-gray-800">Add Expense</h2>
-
-    <!-- Description -->
-    <div class="space-y-2">
-      <label class="block font-medium text-gray-700">Description</label>
-
-      <input
-        v-model="description"
-        placeholder="Hotel"
-        class="w-full rounded-lg border border-gray-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-      />
-    </div>
-
-    <!-- Amount -->
-    <div class="space-y-2">
-      <label class="block font-medium text-gray-700">Amount</label>
-
-      <input
-        v-model.number="amount"
-        type="number"
-        min="0"
-        class="w-full rounded-lg border border-gray-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-      />
-    </div>
-
-    <!-- Contributors -->
-
-    <div class="space-y-3">
-      <h3 class="text-lg font-semibold text-gray-800">Who Paid?</h3>
-
-      <div
-        v-for="contributor in contributors"
-        :key="contributor.participantId"
-        class="flex items-center justify-between gap-4 rounded-lg bg-gray-50 p-3"
+  <div v-if="store.participants.length">
+    <div v-if="!showForm">
+      <button
+        @click="showForm = true"
+        class="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700"
       >
-        <span class="font-medium">
-          {{
-            store.participants.find((p) => p.id === contributor.participantId)
-              ?.name
-          }}
-        </span>
+        + Add Expense
+      </button>
+    </div>
+    <div v-else class="space-y-6">
+      <h2 class="text-2xl font-bold text-gray-800">Add Expense</h2>
+
+      <!-- Description -->
+      <div class="space-y-2">
+        <label class="block font-medium text-gray-700">Description</label>
 
         <input
-          type="number"
-          min="0"
-          v-model.number="contributor.amount"
-          class="w-32 rounded-lg border border-gray-300 px-3 py-1.5 text-right"
+          v-model="description"
+          placeholder="Hotel"
+          class="w-full rounded-lg border border-gray-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-    </div>
 
-    <!-- Shared By -->
+      <!-- Amount -->
+      <div class="space-y-2">
+        <label class="block font-medium text-gray-700">Amount</label>
 
-    <div class="space-y-3">
-      <h3 class="text-lg font-semibold text-gray-800">Shared By</h3>
+        <input
+          v-model.number="amount"
+          type="number"
+          min="0"
+          class="w-full rounded-lg border border-gray-300 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
 
-      <label class="flex items-center gap-2 cursor-pointer font-medium">
-        <input type="checkbox" v-model="allSelected" class="h-4 w-4" />
+      <!-- Contributors -->
 
-        Select All
-      </label>
+      <div class="space-y-3">
+        <h3 class="text-lg font-semibold text-gray-800">Who Paid?</h3>
 
-      <div class="grid grid-cols-2 gap-2">
-        <label
-          v-for="person in store.participants"
-          :key="person.id"
-          class="flex items-center gap-2 rounded-lg bg-gray-50 p-3 cursor-pointer hover:bg-gray-100"
+        <div
+          v-for="contributor in contributors"
+          :key="contributor.participantId"
+          class="flex items-center justify-between gap-4 rounded-lg bg-gray-50 p-3"
         >
-          <input
-            type="checkbox"
-            :value="person.id"
-            v-model="selectedParticipants"
-          />
+          <span class="font-medium">
+            {{
+              store.participants.find((p) => p.id === contributor.participantId)
+                ?.name
+            }}
+          </span>
 
-          {{ person.name }}
+          <input
+            type="number"
+            min="0"
+            v-model.number="contributor.amount"
+            class="w-32 rounded-lg border border-gray-300 px-3 py-1.5 text-right"
+          />
+        </div>
+      </div>
+
+      <!-- Shared By -->
+
+      <div class="space-y-3">
+        <h3 class="text-lg font-semibold text-gray-800">Shared By</h3>
+
+        <label class="flex items-center gap-2 cursor-pointer font-medium">
+          <input type="checkbox" v-model="allSelected" class="h-4 w-4" />
+
+          Select All
         </label>
+
+        <div class="grid grid-cols-2 gap-2">
+          <label
+            v-for="person in store.participants"
+            :key="person.id"
+            class="flex items-center gap-2 rounded-lg bg-gray-50 p-3 cursor-pointer hover:bg-gray-100"
+          >
+            <input
+              type="checkbox"
+              :value="person.id"
+              v-model="selectedParticipants"
+            />
+
+            {{ person.name }}
+          </label>
+        </div>
+      </div>
+
+      <!-- Button -->
+
+      <div class="flex gap-3">
+        <button
+          @click="addExpense"
+          class="flex-1 rounded-lg bg-blue-600 py-3 font-semibold text-white"
+        >
+          Save Expense
+        </button>
+
+        <button
+          @click="cancelExpense"
+          class="flex-1 rounded-lg bg-gray-200 py-3 font-semibold text-gray-700"
+        >
+          Cancel
+        </button>
       </div>
     </div>
-
-    <!-- Button -->
-
-    <div class="flex gap-3">
-      <button
-        @click="addExpense"
-        class="flex-1 rounded-lg bg-blue-600 py-3 font-semibold text-white"
-      >
-        Save Expense
-      </button>
-
-      <button
-        @click="cancelExpense"
-        class="flex-1 rounded-lg bg-gray-200 py-3 font-semibold text-gray-700"
-      >
-        Cancel
-      </button>
-    </div>
+  </div>
+  <div v-else class="rounded-xl bg-gray-50 p-6 text-center text-gray-500">
+    No participants yet.
   </div>
 </template>
