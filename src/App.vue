@@ -1,31 +1,38 @@
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted } from "vue";
+import { useTripStore } from "./stores/tripStore";
 
-import { useTripStore } from './stores/tripStore'
+import ParticipantForm from "./components/ParticipantForm.vue";
+import ExpenseForm from "./components/ExpenseForm.vue";
+import ExpenseList from "./components/ExpenseList.vue";
+import SettlementView from "./components/SettlementView.vue";
+import SettlementList from "./components/SettlementList.vue";
 
-import ParticipantForm from './components/ParticipantForm.vue'
-import ExpenseForm from './components/ExpenseForm.vue'
-import ExpenseList from './components/ExpenseList.vue'
-
-const store = useTripStore()
+const store = useTripStore();
 
 onMounted(() => {
-    store.load()
-})
+  store.load();
+});
 </script>
 
 <template>
-    <div>
-        <h1>Travel Expense Splitter</h1>
+  <h1>Travel Expense Splitter</h1>
 
-        <ParticipantForm />
+  <ParticipantForm />
 
-        <hr>
+  <hr />
 
-        <ExpenseForm />
+  <ExpenseForm />
 
-        <hr>
+  <hr />
 
-        <ExpenseList />
-    </div>
+  <ExpenseList />
+
+  <hr />
+
+  <SettlementView />
+  
+  <hr />
+
+  <SettlementList />
 </template>
