@@ -1,7 +1,10 @@
 <script setup>
+import { ref } from "vue";
 import { useTripStore } from "../stores/tripStore";
 
 const store = useTripStore();
+
+const expenseToDelete = ref(null);
 
 function getPersonName(id) {
   return store.participants.find((p) => p.id === id)?.name ?? "Unknown";
@@ -18,6 +21,21 @@ function getContributors(expense) {
 
 function getParticipants(expense) {
   return expense.participants.map((id) => getPersonName(id)).join(", ");
+}
+
+function confirmDelete(expense) {
+  expenseToDelete.value = expense;
+}
+
+function deleteExpense() {
+  if (!expenseToDelete.value) return;
+
+  store.removeExpense(expenseToDelete.value.id);
+  expenseToDelete.value = null;
+}
+
+function cancelDelete() {
+  expenseToDelete.value = null;
 }
 </script>
 
@@ -50,7 +68,7 @@ function getParticipants(expense) {
           </span>
 
           <button
-            @click="store.removeExpense(expense.id)"
+            @click="confirmDelete(expense)"
             class="rounded-lg bg-red-100 px-3 py-1 text-sm font-semibold text-red-600 hover:bg-red-200"
           >
             Delete
@@ -61,15 +79,45 @@ function getParticipants(expense) {
       <div class="text-gray-600">
         <p>
           <span class="font-semibold">Paid By:</span>
-
           {{ getContributors(expense) }}
         </p>
 
         <p>
           <span class="font-semibold">Shared By:</span>
-
           {{ getParticipants(expense) }}
         </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div
+    v-if="expenseToDelete"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+  >
+    <div class="w-96 rounded-xl bg-white p-6 shadow-xl">
+      <h3 class="text-lg font-bold text-gray-800">Delete Expense?</h3>
+
+      <p class="mt-2 text-gray-600">
+        Are you sure you want to delete
+        <span class="font-semibold">"{{ expenseToDelete.description }}"</span>
+        ?
+      </p>
+
+      <div class="mt-6 flex justify-end gap-3">
+        <button
+          @click="cancelDelete"
+          class="rounded-lg bg-gray-100 px-4 py-2 font-semibold text-gray-700 hover:bg-gray-200"
+        >
+          Cancel
+        </button>
+
+        <button
+          @click="deleteExpense"
+          class="rounded-lg bg-red-600 px-4 py-2 font-semibold text-white hover:bg-red-700"
+        >
+          Delete
+        </button>
       </div>
     </div>
   </div>
