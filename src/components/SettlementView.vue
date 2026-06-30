@@ -29,7 +29,23 @@ const balances = computed(() => {
 
   return result;
 });
+const totalPaid = computed(() => {
+  const result = {};
 
+  // Initialize everyone
+  store.participants.forEach((person) => {
+    result[person.id] = 0;
+  });
+
+  // Sum contributions
+  store.expenses.forEach((expense) => {
+    expense.contributors.forEach((contributor) => {
+      result[contributor.participantId] += contributor.amount;
+    });
+  });
+
+  return result;
+});
 function getName(id) {
   return store.participants.find((p) => p.id === id)?.name;
 }
@@ -45,21 +61,38 @@ function getName(id) {
         :key="person.id"
         class="flex items-center justify-between rounded-xl border border-gray-200 bg-white p-4 shadow-sm"
       >
-        <span class="font-semibold text-gray-800">
-          {{ getName(person.id) }}
-        </span>
+        <!-- Left -->
+        <div>
+          <h3 class="font-semibold text-gray-800">
+            {{ getName(person.id) }}
+          </h3>
 
-        <span
-          class="rounded-full px-4 py-1 font-bold"
-          :class="
-            balances[person.id] >= 0
-              ? 'bg-green-100 text-green-700'
-              : 'bg-red-100 text-red-700'
-          "
-        >
-          {{ balances[person.id] >= 0 ? "+" : "" }}
-          ₱{{ balances[person.id].toFixed(2) }}
-        </span>
+          <p class="mt-1 text-sm text-gray-500">
+            Total Paid:
+            <span class="font-semibold text-gray-700">
+              ₱{{ totalPaid[person.id].toFixed(2) }}
+            </span>
+          </p>
+        </div>
+
+        <!-- Right -->
+        <div class="text-right">
+          <span
+            class="inline-flex rounded-full px-4 py-1 font-bold"
+            :class="
+              balances[person.id] >= 0
+                ? 'bg-green-100 text-green-700'
+                : 'bg-red-100 text-red-700'
+            "
+          >
+            {{ balances[person.id] >= 0 ? "+" : "" }}
+            ₱{{ balances[person.id].toFixed(2) }}
+          </span>
+
+          <p class="mt-1 text-xs text-gray-500">
+            {{ balances[person.id] >= 0 ? "Gets back" : "Owes" }}
+          </p>
+        </div>
       </div>
     </div>
   </div>
